@@ -1,0 +1,19 @@
+{
+  "name": "endpoint_test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "start:dev": "tsc && node dist/main.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^17.0.40"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2"
+  }
+}

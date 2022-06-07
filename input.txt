@@ -1,0 +1,8 @@
+CREATE file
+CREATE another/file
+CREATE anotherFile
+LIST
+DELETE anotherFile
+LIST
+MOVE another/file file
+LIST
