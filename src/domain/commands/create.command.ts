@@ -1,11 +1,13 @@
 import { SimpleConstructor } from "../../core/util/simple-constructor";
 import { Command } from "../../core/architecture/command";
 import { FileRepositoryAbstraction } from "../repositories/file.repository.abstraction";
+import { Logger } from "../../core/util/logger";
 
 export class CreateCommand
   extends SimpleConstructor<CreateCommandParams>
   implements Command
 {
+  private logger = new Logger(CreateCommand.name);
   private filePath: string;
   private fileRepository: FileRepositoryAbstraction;
 
@@ -15,18 +17,19 @@ export class CreateCommand
 
   execute(): void {
     if (this.fileRepository.getFile({ path: this.filePath })) {
-      throw new Error(`File ${this.filePath} already exists`);
+      this.logger.error(`File ${this.filePath} already exists`);
+      return;
     }
 
     const fileNames = this.filePath.split("/");
-    var paths: string[] = [];
+    let paths: string[] = [];
 
     for (let i = 0; i < fileNames.length; i++) {
       let filePath = fileNames.slice(0, i + 1).join("/");
       paths.push(filePath);
     }
 
-    var lastCreated = this.fileRepository.getFile({ path: "" });
+    let lastCreated = this.fileRepository.getFile({ path: "" });
 
     paths.forEach((path, index) => {
       if (!this.fileRepository.getFile({ path })) {
@@ -36,6 +39,8 @@ export class CreateCommand
           children: [],
           path: path,
         });
+      } else {
+        lastCreated = this.fileRepository.getFile({ path });
       }
     });
   }

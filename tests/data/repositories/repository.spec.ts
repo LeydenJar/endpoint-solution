@@ -1,13 +1,11 @@
-import { AddChildCmsLogic } from "../../src/data/cms-logic/add-child.cms-logic";
-import { CreateFileCmsLogic } from "../../src/data/cms-logic/create-file.cms-logic";
-import {
-  DeleteFileCmsLogic,
-  DeleteFileDataParams,
-} from "../../src/data/cms-logic/delete-file.cms-logic";
-import { GetFileCmsLogic } from "../../src/data/cms-logic/get-file.cms-logic";
-import { RemoveChildCmsLogic } from "../../src/data/cms-logic/remove-child.cms-logic";
-import { FileRepository } from "../../src/data/repositories/file.repository";
-import { FileEntity } from "../../src/domain/entities/file";
+import { AddChildCmsLogic } from "../../../src/data/cms-logic/add-child.cms-logic";
+import { CreateFileCmsLogic } from "../../../src/data/cms-logic/create-file.cms-logic";
+import { DeleteFileCmsLogic } from "../../../src/data/cms-logic/delete-file.cms-logic";
+import { GetFileCmsLogic } from "../../../src/data/cms-logic/get-file.cms-logic";
+import { RemoveChildCmsLogic } from "../../../src/data/cms-logic/remove-child.cms-logic";
+import { FileRepository } from "../../../src/data/repositories/file.repository";
+import { FileEntity } from "../../../src/domain/entities/file";
+import { DeleteFileDataParams } from "../../../src/domain/repositories/file.params";
 
 describe("TestCase", () => {
   let repository = new FileRepository({

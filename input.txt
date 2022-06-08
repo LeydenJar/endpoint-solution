@@ -1,8 +1,16 @@
-CREATE file
-CREATE another/file
-CREATE anotherFile
+CREATE fruits
+CREATE vegetables
+CREATE grains
+CREATE fruits/apples
+CREATE fruits/apples/fuji
+CREATE grains/squash
 LIST
-DELETE anotherFile
+MOVE grains/squash vegetables
+CREATE foods
+MOVE grains foods
+MOVE fruits foods
+MOVE vegetables foods
 LIST
-MOVE another/file file
+DELETE fruits/apples
+DELETE foods/fruits/apples
 LIST

@@ -1,11 +1,13 @@
 import { SimpleConstructor } from "../../core/util/simple-constructor";
 import { Command } from "../../core/architecture/command";
 import { FileRepositoryAbstraction } from "../repositories/file.repository.abstraction";
+import { Logger } from "../../core/util/logger";
 
 export class MoveCommand
   extends SimpleConstructor<MoveCommandParams>
   implements Command
 {
+  private logger = new Logger(MoveCommand.name);
   public get executionLog() {
     return (
       "Moving file " + this.filePath + " to " + this.destinationPath + "..."
@@ -18,11 +20,14 @@ export class MoveCommand
 
   execute(): void {
     const file = this.fileRepository.getFile({ path: this.filePath });
+
     const destinationFile = this.fileRepository.getFile({
       path: this.destinationPath,
     });
+
     if (!file || !destinationFile) {
-      throw new Error("File not found");
+      this.logger.error("File not found");
+      return;
     }
     const parent = file.parent;
     if (parent) {

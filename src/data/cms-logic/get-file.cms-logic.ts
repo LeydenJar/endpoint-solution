@@ -1,3 +1,4 @@
+import { Logger } from "../../core/util/logger";
 import { FileEntity } from "../../domain/entities/file";
 import { GetFileDataParams } from "../../domain/repositories/file.params";
 import { FilesDataHolder } from "../data-holders/files.data-holder";
@@ -5,6 +6,7 @@ import { FilesDataHolder } from "../data-holders/files.data-holder";
 export class GetFileCmsLogic
   implements CmsLogic<FileEntity | null, GetFileDataParams>
 {
+  private logger = new Logger(GetFileCmsLogic.name);
   public execute(params: GetFileDataParams): FileEntity | null {
     if (params.path === "") {
       return FilesDataHolder.mainFile;
@@ -21,7 +23,8 @@ export class GetFileCmsLogic
       if (!currentFile?.children?.length) {
         return null;
       }
-      currentFile = currentFile.children.find((child) => child.name === file);
+
+      currentFile = currentFile.children.find((child) => child?.name === file);
       if (!currentFile) {
         return null;
       }

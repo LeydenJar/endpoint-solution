@@ -1,4 +1,3 @@
-// import { injectionContainer } from "../core/di/initialize-dependencies";
 import { InjectionContainer } from "../core/di/injection-container";
 import { Logger } from "../core/util/logger";
 import { FileRepository } from "../data/repositories/file.repository";
@@ -15,11 +14,13 @@ export class CommandInterpreter {
 
   execute(command: string): void {
     const parsedCommand = this.parseCommand(command);
-    this.logger.info(parsedCommand.executionLog);
-    parsedCommand.execute();
+    if (parsedCommand) {
+      this.logger.info(parsedCommand.executionLog);
+      parsedCommand.execute();
+    }
   }
 
-  parseCommand(command: string): Command {
+  parseCommand(command: string): Command | undefined {
     const commandParts = command.split(" ").map((el) => el.trim());
     const commandName = commandParts[0];
 
@@ -45,9 +46,7 @@ export class CommandInterpreter {
           fileRepository: this.injectionContainer.get(FileRepository.name),
         });
       default:
-        throw new Error("Unknown command");
+        this.logger.error(`Command ${commandName} not recognized`);
     }
-
-    // throw new Error("Unknown command");
   }
 }

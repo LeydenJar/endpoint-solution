@@ -12,9 +12,7 @@ export class Logger {
   constructor(readonly name: string) {}
 
   inspect(obj) {
-    console.log(
-      this.colors.debug(`[${this.name}]: ${util.inspect(obj, { depth: 5 })}`)
-    );
+    console.log(this.colors.debug(util.inspect(obj, { showHidden: true })));
   }
 
   log(message) {

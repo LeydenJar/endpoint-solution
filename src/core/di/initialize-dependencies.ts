@@ -4,7 +4,6 @@ import { DeleteFileCmsLogic } from "../../data/cms-logic/delete-file.cms-logic";
 import { GetFileCmsLogic } from "../../data/cms-logic/get-file.cms-logic";
 import { RemoveChildCmsLogic } from "../../data/cms-logic/remove-child.cms-logic";
 import { FileRepository } from "../../data/repositories/file.repository";
-import { CommandInterpreter } from "../../presentation/command-interpreter";
 import { InjectionContainer } from "./injection-container";
 
 export function initializeInjectionContainer(): InjectionContainer {
@@ -17,6 +16,7 @@ export function initializeInjectionContainer(): InjectionContainer {
   container.initialize(new GetFileCmsLogic());
   container.initialize(new RemoveChildCmsLogic());
 
+  //! Repository
   container.initialize(
     new FileRepository({
       addChildCmsLogic: container.get(AddChildCmsLogic.name),
@@ -26,8 +26,6 @@ export function initializeInjectionContainer(): InjectionContainer {
       removeChildCmsLogic: container.get(RemoveChildCmsLogic.name),
     })
   );
-
-  // container.initialize(new CommandInterpreter());
 
   return container;
 }
