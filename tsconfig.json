@@ -6,7 +6,15 @@
     "forceConsistentCasingInFileNames": true,            
     "strict": true,                                      
     "skipLibCheck": true,
-    "noImplicitAny": false,
     "outDir": "./dist",
-  }
+    "noImplicitAny": false,
+    "strictPropertyInitialization": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "removeComments": true,
+  },
+  "include": [
+    "src/presentation/**/*.ts",
+    "src/**/*.ts"
+  ],
 }

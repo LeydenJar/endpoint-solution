@@ -2,7 +2,6 @@ import chalk from "chalk";
 import * as util from "util";
 
 export class Logger {
-  name: string;
   colors = {
     debug: chalk.green,
     info: chalk.blue,
@@ -10,9 +9,7 @@ export class Logger {
     error: chalk.red,
   };
 
-  constructor(name) {
-    this.name = name;
-  }
+  constructor(readonly name: string) {}
 
   inspect(obj) {
     console.log(

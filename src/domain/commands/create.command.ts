@@ -1,19 +1,20 @@
-import fileRepository from "../../data/file.repository";
-import { Command } from "./command";
+import { SimpleConstructor } from "../../core/util/simple-constructor";
+import { Command } from "../../core/architecture/command";
+import { FileRepositoryAbstraction } from "../repositories/file.repository.abstraction";
 
-export class CreateCommand implements Command<string> {
+export class CreateCommand
+  extends SimpleConstructor<CreateCommandParams>
+  implements Command
+{
+  private filePath: string;
+  private fileRepository: FileRepositoryAbstraction;
+
   public get executionLog(): string {
     return "Creating " + this.filePath + "...";
   }
-  filePath: string;
-  //TODO: Consider using interfaces
-  constructor(filePath: string) {
-    this.filePath = filePath;
-  }
 
   execute(): void {
-    //Check if the file doesn't exist yet
-    if (fileRepository.getFile(this.filePath)) {
+    if (this.fileRepository.getFile({ path: this.filePath })) {
       throw new Error(`File ${this.filePath} already exists`);
     }
 
@@ -25,11 +26,11 @@ export class CreateCommand implements Command<string> {
       paths.push(filePath);
     }
 
-    var lastCreated = fileRepository.getFile("");
+    var lastCreated = this.fileRepository.getFile({ path: "" });
 
     paths.forEach((path, index) => {
-      if (!fileRepository.getFile(path)) {
-        lastCreated = fileRepository.createFile({
+      if (!this.fileRepository.getFile({ path })) {
+        lastCreated = this.fileRepository.createFile({
           name: fileNames[index],
           parent: lastCreated,
           children: [],
@@ -38,4 +39,9 @@ export class CreateCommand implements Command<string> {
       }
     });
   }
+}
+
+interface CreateCommandParams {
+  filePath: string;
+  fileRepository: FileRepositoryAbstraction;
 }

@@ -1,37 +1,53 @@
+// import { injectionContainer } from "../core/di/initialize-dependencies";
+import { InjectionContainer } from "../core/di/injection-container";
 import { Logger } from "../core/util/logger";
+import { FileRepository } from "../data/repositories/file.repository";
 import { CommandsEnum } from "../domain/commands/comands.enum";
-import { Command } from "../domain/commands/command";
+import { Command } from "../core/architecture/command";
 import { CreateCommand } from "../domain/commands/create.command";
 import { DeleteCommand } from "../domain/commands/delete.command";
 import { ListCommand } from "../domain/commands/list.command";
 import { MoveCommand } from "../domain/commands/move.command";
 
 export class CommandInterpreter {
-  private logger = new Logger("CommandInterpreter");
+  constructor(readonly injectionContainer: InjectionContainer) {}
+  private logger = new Logger(CommandInterpreter.name);
+
   execute(command: string): void {
     const parsedCommand = this.parseCommand(command);
     this.logger.info(parsedCommand.executionLog);
     parsedCommand.execute();
   }
 
-  parseCommand(command: string): Command<any> {
+  parseCommand(command: string): Command {
     const commandParts = command.split(" ").map((el) => el.trim());
     const commandName = commandParts[0];
 
     switch (commandName) {
       case CommandsEnum.CREATE:
-        return new CreateCommand(commandParts[1]);
+        return new CreateCommand({
+          filePath: commandParts[1],
+          fileRepository: this.injectionContainer.get(FileRepository.name),
+        });
       case CommandsEnum.LIST:
-        return new ListCommand();
+        return new ListCommand({
+          fileRepository: this.injectionContainer.get(FileRepository.name),
+        });
       case CommandsEnum.DELETE:
-        return new DeleteCommand(commandParts[1]);
+        return new DeleteCommand({
+          filePath: commandParts[1],
+          fileRepository: this.injectionContainer.get(FileRepository.name),
+        });
       case CommandsEnum.MOVE:
         return new MoveCommand({
           filePath: commandParts[1],
           destinationPath: commandParts[2],
+          fileRepository: this.injectionContainer.get(FileRepository.name),
         });
       default:
         throw new Error("Unknown command");
     }
+
+    // throw new Error("Unknown command");
   }
 }

@@ -1,12 +1,6 @@
-export class FileEntity {
-  //TODO: Use SimpleConstructor
-  constructor(params: FileEntityParams) {
-    this.parent = params.parent;
-    this.name = params.name;
-    this.children = params.children;
-    this.path = params.path;
-  }
+import { SimpleConstructor } from "../../core/util/simple-constructor";
 
+export class FileEntity extends SimpleConstructor<FileEntityParams> {
   parent?: FileEntity | null;
   children: FileEntity[] = [];
   name: string;

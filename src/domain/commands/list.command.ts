@@ -1,16 +1,22 @@
 import { Logger } from "../../core/util/logger";
-import fileRepository from "../../data/file.repository";
+import { SimpleConstructor } from "../../core/util/simple-constructor";
 import { FileEntity } from "../entities/file";
-import { Command } from "./command";
+import { Command } from "../../core/architecture/command";
+import { FileRepositoryAbstraction } from "../repositories/file.repository.abstraction";
 
-export class ListCommand implements Command<string> {
-  private logger = new Logger("ListCommand");
+export class ListCommand
+  extends SimpleConstructor<ListCommandParams>
+  implements Command
+{
+  private logger = new Logger(ListCommand.name);
+  private fileRepository: FileRepositoryAbstraction;
+
   get executionLog(): string {
     return "Listing...";
   }
 
   execute(): void {
-    const mainFile = fileRepository.getFile("") as FileEntity;
+    const mainFile = this.fileRepository.getFile({ path: "" }) as FileEntity;
     this.logTree(mainFile);
   }
 
@@ -28,4 +34,8 @@ export class ListCommand implements Command<string> {
     const minus = "--".repeat(file.path.split("/").length - 1);
     this.logger.debug(minus + file.name);
   }
+}
+
+interface ListCommandParams {
+  fileRepository: FileRepositoryAbstraction;
 }

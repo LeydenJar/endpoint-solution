@@ -1,40 +1,39 @@
-import fileRepository from "../../data/file.repository";
-import { Command } from "./command";
+import { SimpleConstructor } from "../../core/util/simple-constructor";
+import { Command } from "../../core/architecture/command";
+import { FileRepositoryAbstraction } from "../repositories/file.repository.abstraction";
 
-export class MoveCommand implements Command<any> {
+export class MoveCommand
+  extends SimpleConstructor<MoveCommandParams>
+  implements Command
+{
   public get executionLog() {
     return (
       "Moving file " + this.filePath + " to " + this.destinationPath + "..."
     );
   }
 
-  filePath: string;
-  destinationPath: string;
-
-  //TODO make this an interface
-  constructor(params: { filePath: string; destinationPath: string }) {
-    this.filePath = params.filePath;
-    this.destinationPath = params.destinationPath;
-  }
+  private filePath: string;
+  private destinationPath: string;
+  private fileRepository: FileRepositoryAbstraction;
 
   execute(): void {
-    //Get the file
-    const file = fileRepository.getFile(this.filePath);
-
-    //Get the destination file
-    const destinationFile = fileRepository.getFile(this.destinationPath);
-
+    const file = this.fileRepository.getFile({ path: this.filePath });
+    const destinationFile = this.fileRepository.getFile({
+      path: this.destinationPath,
+    });
     if (!file || !destinationFile) {
       throw new Error("File not found");
     }
-
-    //Delete file from it's parent's children
     const parent = file.parent;
     if (parent) {
-      fileRepository.removeChild(parent, file);
+      this.fileRepository.removeChild({ parent, file });
     }
-
-    //Add file as children of destination file
-    fileRepository.addChild(destinationFile, file);
+    this.fileRepository.addChild({ parent: destinationFile, file });
   }
+}
+
+interface MoveCommandParams {
+  filePath: string;
+  destinationPath: string;
+  fileRepository: FileRepositoryAbstraction;
 }

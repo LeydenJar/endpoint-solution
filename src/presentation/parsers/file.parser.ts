@@ -1,9 +1,9 @@
 import * as fs from "fs";
 
 export class FileParser {
-  constructor(filePath: string) {
-    this.filePath = filePath;
-    this.fileContent = fs.readFileSync(filePath, "utf8");
+  constructor(params: FileParserParams) {
+    this.filePath = params.inputFile;
+    this.fileContent = fs.readFileSync(params.inputFile, "utf8");
     this.commands = this.fileContent.split("\n");
     this.nextCommand = 0;
   }
@@ -22,4 +22,8 @@ export class FileParser {
   filePath: string;
   fileContent: string;
   commands: string[];
+}
+
+interface FileParserParams {
+  inputFile: string;
 }
